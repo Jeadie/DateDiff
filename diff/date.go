@@ -1,4 +1,4 @@
-package DateDiff
+package diff
 
 import (
 	"errors"
