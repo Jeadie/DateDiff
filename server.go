@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 )
-const DefaultPort = uint(8000)
 
+const DefaultPort = uint(8000)
 
 func Server(args []string) {
 
