@@ -3,6 +3,7 @@ package DateDiff
 import (
 	"errors"
 	"fmt"
+	"math"
 )
 
 // AbsoluteDateDifference computes the absolute difference in days between the two dates (x, y: unparsed as strings).
@@ -50,8 +51,53 @@ func isCorrectStructure(date string) bool {
 	return len(date) == 10 && date[4] == '-' && date[7] == '-'
 }
 
+// constructDate validates the year, month, day parameters and constructs a Date if valid.
 func constructDate(year, month, day string) (Date, error) {
-	return Date{}, nil
+	y, err := UintParse(year)
+	if err != nil {
+		return Date{}, fmt.Errorf("year is not a valid integer because %w", err)
+	}
+	m, err := UintParse(month)
+	if err != nil {
+		return Date{}, fmt.Errorf("month is not a valid integer because %w", err)
+	}
+	d, err := UintParse(day)
+	if err != nil {
+		return Date{}, fmt.Errorf("day is not a valid integer because %w", err)
+	}
+
+	// Validate if y, m, d construct a valid date.
+	err = validateDate(y, m, d)
+	if err != nil {
+		return Date{}, fmt.Errorf("")
+	}
+
+	date := Date{
+		year:  y,
+		month: m,
+		day:   d,
+	}
+	return date, nil
+}
+
+func validateDate(y, m, d uint) error {
+	if m == 0 || m > 12 {
+		return errors.New("month is not within range [1, 12]")
+	}
+	if isLeapYear(y) {
+		if d == 0 || d > monthDatesLeap[m-1] {
+			return fmt.Errorf("in month %d, there are not %d days during a leap year", m, d)
+		}
+	} else {
+		if d == 0 || d > monthDates[m-1] {
+			return fmt.Errorf("in month %d, there are not %d days during a non-leap year", m, d)
+		}
+	}
+	return nil
+}
+
+func isLeapYear(year uint) bool {
+	return year%4 == 0
 }
 
 // Date from the Gregorian calendar. Date structure are valid before created.
@@ -62,5 +108,40 @@ type Date struct {
 }
 
 func (d Date) AbsoluteDifference(e Date) uint {
-	return 0
+	diff := d.DaysFromZero() - e.DaysFromZero()
+	if diff < 0 {
+		diff = math.MaxUint - diff
+	}
+	return diff
 }
+
+func (d Date) DaysFromStartOfYear() uint {
+	result := d.day
+
+	var daysInYear *[12]uint
+	if isLeapYear(d.year) {
+		daysInYear = &monthDatesLeap
+	} else {
+		daysInYear = &monthDates
+	}
+	for i := 0; i < int(d.month)-1; i++ {
+		result += daysInYear[i]
+	}
+	return result
+}
+
+func (d Date) DaysFromZero() uint {
+	result := d.DaysFromStartOfYear()
+	if d.year == 0 {
+		return result
+	}
+	result += 365 * (d.year - 1)
+
+	// Compensate for leap years
+	result += (d.year / 4) + 1
+	fmt.Println(d, result)
+	return result
+}
+
+var monthDates = [12]uint{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
+var monthDatesLeap = [12]uint{31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
