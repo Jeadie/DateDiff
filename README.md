@@ -23,7 +23,7 @@ After installing (see [install binary]()):
 ```
 
 ### Server
-For running from binary, after installing (see [install binary]()):
+For running from binary, after installing (see [install binary](#installation)):
 ```shell
 datediff server -p=8001
 ```
@@ -34,4 +34,11 @@ docker run ...
 ```
 
 ## Installation
-> WORK IN PROGRESS
+Binaries are available for all releases, [here](https://github.com/Jeadie/DateDiff/releases/), built across OSs and architectures.
+```shell
+curl -OL https://github.com/Jeadie/DateDiff/releases/download/v0.0.2/datediff-v0.0.2-darwin-amd64.tar.gz
+tar -xzf  datediff-v0.0.2-darwin-amd64.tar.gz
+
+# Binary can then be used as above, e.g. 
+./datediff cmp 2020-02-20 2002-02-20 
+```
