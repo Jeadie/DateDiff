@@ -3,7 +3,6 @@ package DateDiff
 import (
 	"errors"
 	"fmt"
-	"math"
 )
 
 // AbsoluteDateDifference computes the absolute difference in days between the two dates (x, y: unparsed as strings).
@@ -108,11 +107,12 @@ type Date struct {
 }
 
 func (d Date) AbsoluteDifference(e Date) uint {
-	diff := d.DaysFromZero() - e.DaysFromZero()
-	if diff < 0 {
-		diff = math.MaxUint - diff
+	a, b := d.DaysFromZero(), e.DaysFromZero()
+	if a < b {
+		return b - a - 1
+	} else {
+		return a - b - 1
 	}
-	return diff
 }
 
 func (d Date) DaysFromStartOfYear() uint {
@@ -139,7 +139,6 @@ func (d Date) DaysFromZero() uint {
 
 	// Compensate for leap years
 	result += (d.year / 4) + 1
-	fmt.Println(d, result)
 	return result
 }
 
