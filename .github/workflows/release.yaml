@@ -12,7 +12,10 @@ jobs:
         goarch: [arm64, amd64]
 
     steps:
-      - uses: actions/checkout@v2
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: wangyoucao577/go-release-action@v1.25
         with:
           build_command: make release
