@@ -11,7 +11,5 @@ jobs:
           fetch-depth: 0
       - name: Setup Go
         uses: actions/setup-go@v2
-      - name Run go fmt
-      - run: gofmt -d -l $(find ./** | grep "\.go")
-      - name: Run Tests
-        run: go test ./...
+      - name: Run CI
+        run: make CI
