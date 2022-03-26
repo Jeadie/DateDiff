@@ -15,3 +15,8 @@
 # vendor/
 
 .idea
+
+# Common names for testing binaries, stored in working directory
+DateDiff
+datediff
+
