@@ -1,0 +1,17 @@
+name: go-apidiff
+on: [ pull_request ]
+jobs:
+  go-apidiff:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Go
+        uses: actions/setup-go@v2
+      - name Run go fmt
+      - run: gofmt -d -l $(find ./** | grep "\.go")
+      - name: Run Tests
+        run: go test ./...
