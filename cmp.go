@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/Jeadie/DateDiff/diff"
 	"os"
-	"strconv"
 )
 
 func Cmp(args []string) {
@@ -17,6 +16,6 @@ func Cmp(args []string) {
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
 	} else {
-		fmt.Fprintf(os.Stdout, strconv.Itoa(int(result)))
+		fmt.Fprintf(os.Stdout, "%d\n", result)
 	}
 }
