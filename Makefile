@@ -11,7 +11,7 @@ builddockerbinary:
 	CGO_ENABLED=0 GOOS=linux go build -ldflags "-s" -a -installsuffix cgo -o datediff_docker .
 	chmod +x datediff_docker
 
-release: build test
+release: test build
 
 CI: test
 
