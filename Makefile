@@ -1,7 +1,7 @@
 default: build
 
 build:
-	go build -o datediff .
+	go build .
 
 test:
 	gofmt -d -l `find ./** | grep "\.go"`
