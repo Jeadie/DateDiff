@@ -22,7 +22,8 @@ func Server(args []string) {
 	port := argFs.String("p", getDefaultPort(), "server connection port")
 	argFs.Parse(args)
 
-	_, err := diff.UintParse(*port); if err != nil {
+	_, err := diff.UintParse(*port)
+	if err != nil {
 		fmt.Fprintf(os.Stderr, "invalid port specified: %s\n", *port)
 		return
 	}

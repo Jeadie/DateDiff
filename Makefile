@@ -3,6 +3,9 @@ default: build
 build:
 	go build .
 
+format:
+	gofmt -w `find ./** | grep "\.go"`
+
 test:
 	gofmt -l -d `find ./** | grep "\.go"` | test -z --
 	go test ./...
