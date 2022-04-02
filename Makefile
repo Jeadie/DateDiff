@@ -4,7 +4,7 @@ build:
 	go build .
 
 test:
-	gofmt -d -l `find ./** | grep "\.go"`
+	gofmt -l -d `find ./** | grep "\.go"` | test -z --
 	go test ./...
 
 builddockerbinary:
