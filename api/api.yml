@@ -1,0 +1,37 @@
+openapi: 3.0.0
+info:
+  title: DateDiff API
+  description: API integration for DateDiff. See Go module github.com/Jeadie/DateDiff
+  version: 0.1.9 # TODO: Use templating for version from DateDiff versions (to Github release/tag schema).
+servers:
+  - url: http://0.0.0.0:8000/v1
+    description: Local server for engineer testing
+paths:
+  /diff:
+    get:
+      summary: Calculates the difference in two provided dates.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatesBody'
+
+      responses:
+        '200':
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    type: integer
+
+components:
+  schemas:
+    DatesBody:
+      properties:
+        start:
+          type: string
+        end:
+          type: string
