@@ -110,9 +110,10 @@ func (d Date) AbsoluteDifference(e Date) uint {
 	a, b := d.DaysFromZero(), e.DaysFromZero()
 	if a < b {
 		return b - a - 1
-	} else {
+	} else if a > b {
 		return a - b - 1
 	}
+	return 0
 }
 
 func (d Date) DaysFromStartOfYear() uint {
