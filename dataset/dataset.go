@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"os"
 	"strconv"
+	"sync"
 )
 
 type DatasetParams struct {
@@ -18,7 +19,6 @@ type DatasetParams struct {
 func CreateDataset(param DatasetParams) {
 	validCount := uint(float64(param.Size) * param.PositiveRatio)
 	invalidCount := param.Size - validCount
-	fmt.Println(validCount, invalidCount)
 
 	w, err := ConstructWriter(param.OutputFilename)
 	if err != nil {
@@ -27,23 +27,42 @@ func CreateDataset(param DatasetParams) {
 	}
 	_ = w.Write([]string{"start", "end", "diff", "valid"})
 
-	for validCount > 0 || invalidCount > 0 {
-		s, e := ConstructInput(), ConstructInput()
+	out := make(chan []string)
+
+	wg := &sync.WaitGroup{}
+	wg.Add(2)
+
+	go createLines(validCount, out, ConstructPossibleValidInput, true, wg)
+	go createLines(invalidCount, out, ConstructPossibleInvalidInput, false, wg)
+
+	go func(w *csv.Writer) {
+		for l := range out {
+			w.Write(l)
+		}
+	}(w)
+	wg.Wait()
+
+	w.Flush()
+}
+
+func createLines(total uint, out chan []string, inFn func() string, outputValid bool, wg *sync.WaitGroup) {
+	defer wg.Done()
+	var label string
+	if outputValid {
+		label = "1"
+	} else {
+		label = "0"
+	}
+
+	for total > 0 {
+		s, e := inFn(), inFn()
 		v, err := diff.AbsoluteDateDifference(s, e)
-		if err == nil {
-			if validCount > 0 {
-				_ = w.Write([]string{s, e, strconv.Itoa(int(v)), "1"})
-				validCount--
-			}
-		} else {
-			if invalidCount > 0 {
-				// Invalid difference, use placeholder difference value
-				_ = w.Write([]string{s, e, "0", "0"})
-				invalidCount--
-			}
+
+		if (err == nil) == outputValid {
+			out <- []string{s, e, strconv.Itoa(int(v)), label}
+			total--
 		}
 	}
-	w.Flush()
 }
 
 func ConstructWriter(filename string) (*csv.Writer, error) {
@@ -54,12 +73,22 @@ func ConstructWriter(filename string) (*csv.Writer, error) {
 	return csv.NewWriter(f), nil
 }
 
-func ConstructInput() string {
+func ConstructPossibleInvalidInput() string {
 	// Since Uint has 10 base-10 digits, eight least significant digits are entirely random
 	v := rand.Uint32()
 	return fmt.Sprintf("%04d-%02d-%02d",
-		v%1000,
-		(v/1000)%100,
-		(v/100000)%100,
+		v%5000,
+		(v/10000)%25,    // ~50% months will be invalid
+		(v/1000000)%100, // of the 50% valid months, ~70% of days invalid
+	)
+}
+
+func ConstructPossibleValidInput() string {
+	// Since Uint has 10 base-10 digits, eight least significant digits are entirely random
+	v := rand.Uint32()
+	return fmt.Sprintf("%04d-%02d-%02d",
+		v%5000,
+		(v/1000)%12+1,
+		(v/100000)%31+1,
 	)
 }
