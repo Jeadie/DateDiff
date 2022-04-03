@@ -34,5 +34,8 @@ func main() {
 }
 
 func usage() {
-	fmt.Println("Hello world")
+	fmt.Println("Usage: datediff [SUBCOMMAND] <SUBCOMMAND ARGS>")
+	fmt.Println("  Subcommands:")
+	fmt.Println("    cmp: Compare two dates")
+	fmt.Println("    server: Spin up a server that handles compare requests")
 }
