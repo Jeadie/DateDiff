@@ -1,44 +1,51 @@
 # DateDiff
-DateDiff does one thing, and one thing well: calculate the absolute differences, in days, between two dates of the exact format `YYYY-MM-DD`.
+DateDiff does one thing, and one thing well: calculate the absolute difference, in days, between two dates of the exact format `YYYY-MM-DD`.
 
 ## Usage
-There are three ways to use datediff: a library, via the command line or as a server (either self-configured, or as a docker container).
+There are three ways to use datediff:
+- as a Go library
+- via the command line
+- or run it as a server
 
 ### Library
+Datediff has the go module `github.com/Jeadie/DateDiff/diff`. Simply import and use `diff.AbsoluteDateDifference`.
 ```go
 import (
     "github.com/Jeadie/DateDiff/diff"
 )
 
-days, err := diff.AbsoluteDateDifference("2020-02-20", "2002-02-20")
-if err == nil {
+days, err := diff.AbsoluteDateDifference("2020-02-20", "2002-02-20"); if err == nil {
 	fmt.Printf("%d days\n", days)
 }
 ```
 
 ### Command Line
-After installing (see [install binary]()):
+Datediff can also run via the terminal. After installing or building from source. Simply run
 ```shell
- datediff cmp 2020-02-20 2002-02-20
+ datediff cmp 2020-02-20 2002-02-21
 ```
 
 ### Server
-For running from binary, after installing (see [install binary](#installation)):
+Datediff can operate as a server. Either run the binary in server mode:
 ```shell
 datediff server -p=8001
 ```
 
-**(WIP)**: Or the server can be run as a Docker container:
+or the server can be run as a Docker container:
 ```shell
-docker run ...
+docker run -e PORT=8001 -t jeadi/datediff:latest
 ```
 
 ## Installation
-Binaries are available for all releases, [here](https://github.com/Jeadie/DateDiff/releases/), built across OSs and architectures.
+Simple, use the Makefile
 ```shell
-curl -OL https://github.com/Jeadie/DateDiff/releases/download/v0.0.2/datediff-v0.0.2-darwin-amd64.tar.gz
-tar -xzf  datediff-v0.0.2-darwin-amd64.tar.gz
+make build
+```
 
+Binaries are also available for each release and are built against multiple common OS's and architectures. Find them [here](https://github.com/Jeadie/DateDiff/releases/). To download the latest binary for the local OS/arch:
+```shell 
+make download
+ 
 # Binary can then be used as above, e.g. 
-./datediff cmp 2020-02-20 2002-02-20 
+./datediff cmp 2020-02-20 2002-02-20
 ```
