@@ -7,8 +7,8 @@ import (
 )
 
 const defaultOutputFilename = "dataset.csv"
-const defaultDatasetSize = 1000
-const defaultPositiveRatio = 1.0
+const defaultDatasetSize = 100
+const defaultPositiveRatio = 0.5
 
 func Dataset(args []string) {
 	argFs := flag.NewFlagSet(string(DatasetCmd), flag.ExitOnError)
