@@ -9,6 +9,7 @@ type Subcommand string
 
 const (
 	CompareCmd Subcommand = "cmp"
+	DatasetCmd Subcommand = "dataset"
 	ServerCmd  Subcommand = "server"
 )
 
@@ -27,6 +28,10 @@ func main() {
 		Server(os.Args[2:])
 		return
 
+	case DatasetCmd:
+		Dataset(os.Args[2:])
+		return
+
 	default:
 		usage()
 		return
@@ -38,4 +43,5 @@ func usage() {
 	fmt.Println("  Subcommands:")
 	fmt.Println("    cmp: Compare two dates")
 	fmt.Println("    server: Spin up a server that handles compare requests")
+	fmt.Println("    dataset: Construct a dataset of input output pairs, with optionally, invalid inputs")
 }
