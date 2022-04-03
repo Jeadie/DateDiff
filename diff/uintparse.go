@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+// UintParse converts a string representation of an unsigned integer, to an unsigned integer.
 func UintParse(x string) (uint, error) {
 	if len(x) == 0 {
 		return 0, errors.New("empty input is invalid")
@@ -22,14 +23,16 @@ func UintParse(x string) (uint, error) {
 	return y, nil
 }
 
+// pow10 computes 10**x
 func pow10(x uint) uint {
-	//return uint(tenPower[x])
 	return uint(tenPower32[x/32] * tenPower[x%32])
 }
 
+// tenPower and tenPower10 are used to raise a value to the power of 10. Use modulo and divisors to reduce memory of powers
 var tenPower = []float64{1e00, 1e01, 1e02, 1e03, 1e04, 1e05, 1e06, 1e07, 1e08, 1e09, 1e10, 1e11, 1e12, 1e13, 1e14, 1e15,
 	1e16, 1e17, 1e18, 1e19, 1e20, 1e21, 1e22, 1e23, 1e24, 1e25, 1e26, 1e27, 1e28, 1e29, 1e30, 1e31}
 var tenPower32 = []float64{1e00, 1e32, 1e64, 1e96}
+
 var digitParse = map[uint8]uint{
 	'0': 0,
 	'1': 1,

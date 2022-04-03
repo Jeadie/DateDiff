@@ -5,7 +5,7 @@ GO_OS := $(shell go env GOOS)
 GO_ARCH := $(shell go env GOARCH)
 
 build:
-	go build .
+	go build ./...
 
 test:
 	test -z `go fmt ./...`

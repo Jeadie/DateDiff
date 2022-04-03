@@ -79,6 +79,7 @@ func constructDate(year, month, day string) (Date, error) {
 	return date, nil
 }
 
+// validateDate throws an error if the date provided is not valid.
 func validateDate(y, m, d uint) error {
 	if m == 0 || m > 12 {
 		return errors.New("month is not within range [1, 12]")
@@ -95,6 +96,7 @@ func validateDate(y, m, d uint) error {
 	return nil
 }
 
+// isLeapYear returns true if the year is a leap year.
 func isLeapYear(year uint) bool {
 	return year%4 == 0
 }
@@ -116,6 +118,7 @@ func (d Date) AbsoluteDifference(e Date) uint {
 	return 0
 }
 
+// DaysFromZero returns the number of days between the d Date, and the start of the year (i.e. YYYY-01-01)
 func (d Date) DaysFromStartOfYear() uint {
 	result := d.day
 
@@ -131,6 +134,7 @@ func (d Date) DaysFromStartOfYear() uint {
 	return result
 }
 
+// DaysFromZero returns the number of days between the d Date, and zero (i.e. 0000-00-00)
 func (d Date) DaysFromZero() uint {
 	result := d.DaysFromStartOfYear()
 	if d.year == 0 {
@@ -143,5 +147,6 @@ func (d Date) DaysFromZero() uint {
 	return result
 }
 
+// Days in each month of Jan, Feb, ..., Dec
 var monthDates = [12]uint{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 var monthDatesLeap = [12]uint{31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
