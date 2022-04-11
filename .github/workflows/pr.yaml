@@ -10,6 +10,6 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
       - name: Run CI
         run: make CI
